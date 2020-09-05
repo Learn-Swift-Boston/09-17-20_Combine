@@ -27,7 +27,9 @@ class APITests: XCTestCase {
     
     func test_Url() {
         let email = "zev@zeveisenberg.com"
-        let output = URL(string: "https://www.gravatar.com/avatar/6efb64b3947805fb42a761fbcca35b00")
+        let output = URL(string: "https://www.gravatar.com/avatar/6efb64b3947805fb42a761fbcca35b00?s=500")
         XCTAssertEqual(API.gravatar(email: email).url(), output)
     }
+    
+    
 }

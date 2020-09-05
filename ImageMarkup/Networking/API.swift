@@ -8,6 +8,8 @@
 
 import Foundation
 import CryptoKit
+import Combine
+import UIKit.UIImage
 
 enum API {
     case gravatar(email: String)
@@ -17,7 +19,7 @@ extension API {
     func url() -> URL {
         switch self {
         case .gravatar(let email):
-            return URL(string: "https://www.gravatar.com/avatar/\(Self.hash(email: email))")!
+            return URL(string: "https://www.gravatar.com/avatar/\(Self.hash(email: email))?s=500")!
         }
     }
     
