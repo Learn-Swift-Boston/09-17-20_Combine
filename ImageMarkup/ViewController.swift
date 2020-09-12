@@ -51,16 +51,16 @@ class ViewController: UIViewController {
             email = Email.matt.rawValue
         }
         
-        APIClient().get(API.gravatar(email: email).url())
-            .sink(receiveCompletion: { (completion) in
-                switch completion {
-                case let .failure(error):
-                    print("Couldn't get users: \(error)")
-                case .finished: break
-                }
-            }) { image in
-                self.imageView.image = image
-        }.store(in: &calls)
+//        APIClient().get(API.gravatar(email: email).url())
+//            .sink(receiveCompletion: { (completion) in
+//                switch completion {
+//                case let .failure(error):
+//                    print("Couldn't get users: \(error)")
+//                case .finished: break
+//                }
+//            }) { image in
+//                self.imageView.image = image
+//        }.store(in: &calls)
     }
 }
 

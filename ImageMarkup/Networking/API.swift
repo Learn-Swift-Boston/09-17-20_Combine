@@ -7,30 +7,20 @@
 //
 
 import Foundation
-import CryptoKit
-import Combine
-import UIKit.UIImage
 
 enum API {
-    case gravatar(email: String)
+    case image(URL)
+    case subreddit
 }
 
 extension API {
     func url() -> URL {
         switch self {
-        case .gravatar(let email):
-            return URL(string: "https://www.gravatar.com/avatar/\(Self.hash(email: email))?s=500")!
+        case .image(let url):
+            return url
+        case .subreddit:
+            return URL(string: "http://reddit.com/r/aww.json")!
         }
     }
-    
-    static func hash(email: String) -> String {
-        let tidiedEmail = email
-            .trimmingCharacters(in: .whitespaces)
-            .lowercased()
-        let digest = Insecure.MD5.hash(data: tidiedEmail.data(using: .utf8) ?? Data())
-        // https://stackoverflow.com/a/56578995
-        return digest.map { thing in
-            String(format: "%02hhx", thing)
-        }.joined()
-    }
+
 }

@@ -11,13 +11,14 @@ import Foundation
 import UIKit.UIImage
 
 class APIClient {
-    func get(_ url: URL) -> AnyPublisher<UIImage, Never> {
-        URLSession.shared
+    static var queue = DispatchQueue(label: "network", qos: .userInitiated)
+    
+    func get(_ url: URL, session: URLSession = .shared, queue: DispatchQueue = APIClient.queue) -> AnyPublisher<Data, Error> {
+        session
             .dataTaskPublisher(for: url)
-            .map { UIImage(data: $0.data) }
-            .replaceNil(with: UIImage())
-            .replaceError(with: UIImage())
-            .receive(on: DispatchQueue.main)
+            .map(\.data)
+            .mapError { $0 as Error }
+            .receive(on: queue)
             .eraseToAnyPublisher()
     }
     
