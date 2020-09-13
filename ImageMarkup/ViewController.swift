@@ -10,31 +10,27 @@ import UIKit
 import Combine
 
 enum Segment: Int {
-    case zev = 0
-    case matt
-}
-
-enum Email: String {
-    case zev = "zev@zeveisenberg.com"
-    case matt = "mdiasdeveloper@gmail.com"
+    case first = 0
+    case second
 }
 
 class ViewController: UIViewController {
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var imageView: UIImageView!
     
-    var calls: Set<AnyCancellable> = []
+    private var cancellables: Set<AnyCancellable> = []
+    private let client = APIClient()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        getImage(for: .zev)
+        
+        getImage(for: .first)
     }
     
     deinit {
-        calls = []
+        cancellables = []
     }
-
+    
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
         guard let segment = Segment(rawValue: sender.selectedSegmentIndex) else { return }
         
@@ -42,25 +38,42 @@ class ViewController: UIViewController {
     }
     
     func getImage(for segment: Segment) {
-        var email: String
+        let client = APIClient()
         
-        switch segment {
-        case .zev:
-            email = Email.zev.rawValue
-        case .matt:
-            email = Email.matt.rawValue
+        client.get(API.subreddit.url()) // first, get the list of posts
+            .decode(type: Response.self, decoder: JSONDecoder())
+            .map(\.imageUrls) // get out the image URLs we care about, which are of the form (index: Int, url: URL)
+            .flatMap { (indicesAndURLs: [(Int, URL)]) in // turn each URL into a publisher of the corresponding image
+                indicesAndURLs.publisher // Getting a Publishers.Sequence from an Array is how you do that
+                    .flatMap { (index, url) in // URL -> publisher of resulting image
+                        client.get(url)
+                            .map(UIImage.init(data:))
+                            .replaceNil(with: UIImage(systemName: "photo")!)
+                            .replaceError(with: UIImage(systemName: "photo")!)
+                            .map { (index, $0) }
+                    }
+                    .setFailureType(to: Error.self) // outer pipeline has errors, so we need them too
         }
-        
-//        APIClient().get(API.gravatar(email: email).url())
-//            .sink(receiveCompletion: { (completion) in
-//                switch completion {
-//                case let .failure(error):
-//                    print("Couldn't get users: \(error)")
-//                case .finished: break
-//                }
-//            }) { image in
-//                self.imageView.image = image
-//        }.store(in: &calls)
+        .receive(on: DispatchQueue.main)
+        .sink(receiveCompletion: { completion in
+            if case .failure(let error) = completion {
+                print(error)
+            }
+        }, receiveValue: { value in
+            print(type(of: value))
+            // put image in model
+        })
+        .store(in: &cancellables)
     }
 }
 
+extension MutableCollection {
+    subscript<T>(_ index: T) -> Element where T: RawRepresentable, T.RawValue == Index {
+        get {
+            self[index.rawValue]
+        }
+        set {
+            self[index.rawValue] = newValue
+        }
+    }
+}

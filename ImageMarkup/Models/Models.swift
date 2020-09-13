@@ -43,19 +43,14 @@ enum PostHint: String, Codable {
 
 extension Response {
     
-    var imageUrls: [URL] {
+    var imageUrls: [(index: Int, url: URL)] {
+        // swap out befor meetup
+        // []
         data.children
             .map(\.data)
             .filter { $0.postHint == .image }
-            .map(\.url)
-            .prefix(2)
-            .toArray
+            .enumerated()
+            .map { (index: $0.offset, url: $0.element.url) }
     }
     
-}
-
-extension ArraySlice {
-    var toArray: [Element] {
-        Array(self)
-    }
 }
