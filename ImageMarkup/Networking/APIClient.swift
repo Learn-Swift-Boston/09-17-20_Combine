@@ -21,8 +21,8 @@ class APIClient {
         session
             .dataTaskPublisher(for: url)
             .map(\.data)
-            .mapError { $0 as Error }
-            .receive(on: queue)
+            .mapError { $0 as Error } // DataTaskPublisher has an output type of URLError, this discards extra information
+            .receive(on: queue) // ReceiveOn is telling Combine where you want to receive data, in this case I'm not sure this is what you want. If you want to perform background tasks, subscribe(on:) might be your choice. I honestly have only ever done `receive(on:)` for hopping back to main. http://trycombine.com/posts/subscribe-on-receive-on/
             .eraseToAnyPublisher()
     }
     
