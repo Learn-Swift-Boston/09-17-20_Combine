@@ -16,8 +16,8 @@ struct MainView: View {
         VStack {
             Text("Viewing r/aww")
                 .font(.title)
-            List(viewModel.images, id: \.0) { indexImage in
-                Image(uiImage: indexImage.1)
+            List(viewModel.images, id: \.index) { indexImage in
+                Image(uiImage: indexImage.image)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
             }

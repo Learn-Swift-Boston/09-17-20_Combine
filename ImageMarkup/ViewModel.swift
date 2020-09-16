@@ -12,7 +12,7 @@ import UIKit.UIImage
 
 class ViewModel: ObservableObject {
 
-    @Published var images: [(Int, UIImage)] = []
+    @Published var images: [(index: Int, image: UIImage)] = []
 
     private var cancellables: Set<AnyCancellable> = []
     private let client = APIClient()
