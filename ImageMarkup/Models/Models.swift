@@ -25,7 +25,7 @@ struct Child: Codable {
 
 // MARK: - ChildData
 struct ChildData: Codable {
-    let postHint: PostHint
+    let postHint: PostHint?
     let url: URL
     
     enum CodingKeys: String, CodingKey {
