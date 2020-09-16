@@ -14,7 +14,7 @@ struct MainView: View {
 
     var body: some View {
         VStack {
-            Text("Viewing /r/aww")
+            Text("Viewing r/aww")
                 .font(.title)
             List(viewModel.images, id: \.0) { indexImage in
                 Image(uiImage: indexImage.1)
