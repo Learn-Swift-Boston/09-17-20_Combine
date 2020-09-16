@@ -25,7 +25,7 @@ class ViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 if case .failure(let error) = completion {
-                    print(error)
+                    print(error) // TODO: handle errors more gracefully by showing error/empty state
                 }
             }, receiveValue: { value in
                 self.images.append(value)
