@@ -43,7 +43,7 @@ class ViewModel: ObservableObject {
 
     func getIndexedImage(index: Int, url: URL) -> AnyPublisher<(Int, UIImage), Never> {
         // Combine makes retain cycles easy to create. If you know a stream will complete once it's done doing
-        // it's work capturing self is OK, but beware that you can create retain cycles with ease.
+        // its work capturing self is OK, but beware that you can create retain cycles with ease.
         self.client.get(url)
             .map(UIImage.init(data:))
             .replaceNil(with: UIImage(systemName: "photo")!)
