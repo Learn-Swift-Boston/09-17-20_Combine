@@ -43,6 +43,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6D14C0622512E37E004584B1 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6D79F630251191210047B963 /* MainView.swift */,
+				6D3B56DA25119A38007376A3 /* ViewModel.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		6D72BFFC250403CB0045E3D1 = {
 			isa = PBXGroup;
 			children = (
@@ -64,13 +73,12 @@
 			children = (
 				6D91C002250D3F19002EDF69 /* Models */,
 				6D72C01C250406B80045E3D1 /* Networking */,
+				6D14C0622512E37E004584B1 /* View */,
 				6D72C008250403CB0045E3D1 /* AppDelegate.swift */,
 				6D72C00A250403CB0045E3D1 /* SceneDelegate.swift */,
-				6D79F630251191210047B963 /* MainView.swift */,
 				6D72C011250403CE0045E3D1 /* Assets.xcassets */,
 				6D72C013250403CE0045E3D1 /* LaunchScreen.storyboard */,
 				6D72C016250403CE0045E3D1 /* Info.plist */,
-				6D3B56DA25119A38007376A3 /* ViewModel.swift */,
 			);
 			path = ImageMarkup;
 			sourceTree = "<group>";

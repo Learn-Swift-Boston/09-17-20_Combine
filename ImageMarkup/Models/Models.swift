@@ -8,6 +8,10 @@
 
 import Foundation
 
+/*
+ Models were generated with the help of https://app.quicktype.io
+ */
+
 // MARK: - Response
 struct Response: Codable {
     let data: ResponseData
@@ -43,9 +47,8 @@ enum PostHint: String, Codable {
 
 extension Response {
     
+    /// get URLs for images in a given Response and their index in the response
     var imageUrls: [(index: Int, url: URL)] {
-        // swap out befor meetup
-        // []
         data.children
             .map(\.data)
             .filter { $0.postHint == .image }

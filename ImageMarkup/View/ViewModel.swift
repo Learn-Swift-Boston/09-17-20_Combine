@@ -17,6 +17,7 @@ class ViewModel: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
     private let client = APIClient()
 
+    /// get subreddit data, get the images in response order, and set them on `images` for display
     func getData() {
         client.get(API.subreddit.url()) // first, get the list of posts
             .decode(type: Response.self, decoder: JSONDecoder())
@@ -33,6 +34,7 @@ class ViewModel: ObservableObject {
             .store(in: &cancellables)
     }
 
+    /// loop over the indicesAndURLs creating publishers in `getIndexedImage(index: url:)`
     func getPublishersForURLS(_ indicesAndURLs: [(Int, URL)]) -> AnyPublisher<(Int, UIImage), Error> {
         // [].publisher creates an Publisher of Publishers of the Elements in the array
         return indicesAndURLs.publisher // Getting a Publishers.Sequence from an Array is how you do that
@@ -41,6 +43,8 @@ class ViewModel: ObservableObject {
             .eraseToAnyPublisher() // outer pipeline has errors, so we need them too
     }
 
+    
+    /// For a given index and URL, fetch the image at the URL and return it and its associated index
     func getIndexedImage(index: Int, url: URL) -> AnyPublisher<(Int, UIImage), Never> {
         // Combine makes retain cycles easy to create. If you know a stream will complete once it's done doing
         // its work capturing self is OK, but beware that you can create retain cycles with ease.
