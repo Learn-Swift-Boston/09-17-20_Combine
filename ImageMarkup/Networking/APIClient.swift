@@ -14,16 +14,13 @@ class APIClient {
     static var queue = DispatchQueue(label: "network", qos: .userInitiated)
     
     func get(_ url: URL, session: URLSession = .shared, queue: DispatchQueue = APIClient.queue) -> AnyPublisher<Data, Error> {
-        // swap out befor meetup
-//        Just(Data())
-//            .setFailureType(to: Error.self)
-//            .eraseToAnyPublisher()
-        session
-            .dataTaskPublisher(for: url)
-            .map(\.data)
-            .mapError { $0 as Error } // DataTaskPublisher has an output type of URLError, this discards extra information
-            .receive(on: queue)
+        // TODO: replace implementation during the meetup
+        
+        Just(Data())
+            .setFailureType(to: Error.self)
             .eraseToAnyPublisher()
+        // 1. fetch the data for a given URL
+        // 2. ensure data is received on our queue for extra processing
     }
     
 }

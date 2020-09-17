@@ -14,45 +14,36 @@ class ViewModel: ObservableObject {
 
     @Published var images: [(index: Int, image: UIImage)] = []
 
-    private var cancellables: Set<AnyCancellable> = []
     private let client = APIClient()
 
     /// get subreddit data, get the images in response order, and set them on `images` for display
     func getData() {
-        client.get(API.subreddit.url()) // first, get the list of posts
-            .decode(type: Response.self, decoder: JSONDecoder())
-            .map(\.imageUrls) // get out the image URLs we care about, which are of the form (index: Int, url: URL)
-            .flatMap(self.getPublishersForURLS)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
-                if case .failure(let error) = completion {
-                    print(error) // TODO: handle errors more gracefully by showing error/empty state
-                }
-            }, receiveValue: { value in
-                self.images.append(value)
-            })
-            .store(in: &cancellables)
+        // TODO: fill this in during the meetup
+        
+        // 1. get the list of posts as Response
+        // 2. get out the image URLs we care about, which are of the form (index: Int, url: URL)
+        // 3. get the UIImage for each url, in the of the form (index: Int, image: UIImage)
+        // 4. set on self.images
     }
 
     /// loop over the indicesAndURLs creating publishers in `getIndexedImage(index: url:)`
     func getPublishersForURLS(_ indicesAndURLs: [(Int, URL)]) -> AnyPublisher<(Int, UIImage), Error> {
+        // TODO: replace implementation during the meetup
+        
         // [].publisher creates an Publisher of Publishers of the Elements in the array
-        return indicesAndURLs.publisher // Getting a Publishers.Sequence from an Array is how you do that
-            .flatMap(self.getIndexedImage) // Take the success output of the publisher and returns a new publisher with different output
+        // Getting a Publishers.Sequence from an Array is how you do that
+        // Take the success output of the publisher and returns a new publisher with different output
+        // outer pipeline has errors, so we need them too
+        Just((0, UIImage()))
             .setFailureType(to: Error.self)
-            .eraseToAnyPublisher() // outer pipeline has errors, so we need them too
+            .eraseToAnyPublisher()
     }
 
     
     /// For a given index and URL, fetch the image at the URL and return it and its associated index
     func getIndexedImage(index: Int, url: URL) -> AnyPublisher<(Int, UIImage), Never> {
-        // Combine makes retain cycles easy to create. If you know a stream will complete once it's done doing
-        // its work capturing self is OK, but beware that you can create retain cycles with ease.
-        self.client.get(url)
-            .map(UIImage.init(data:))
-            .replaceNil(with: UIImage(systemName: "photo")!)
-            .replaceError(with: UIImage(systemName: "photo")!)
-            .map { (index, $0) }
+        // TODO: replace implementation during the meetup
+        Just((0, UIImage()))
             .eraseToAnyPublisher()
     }
 }

@@ -49,11 +49,8 @@ extension Response {
     
     /// get URLs for images in a given Response and their index in the response
     var imageUrls: [(index: Int, url: URL)] {
-        data.children
-            .map(\.data)
-            .filter { $0.postHint == .image }
-            .enumerated()
-            .map { (index: $0.offset, url: $0.element.url) }
+        // TODO: fill this in during the meetup
+        []
     }
     
 }
