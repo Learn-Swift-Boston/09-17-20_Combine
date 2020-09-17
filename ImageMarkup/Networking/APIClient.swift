@@ -14,10 +14,6 @@ class APIClient {
     static var queue = DispatchQueue(label: "network", qos: .userInitiated)
     
     func get(_ url: URL, session: URLSession = .shared, queue: DispatchQueue = APIClient.queue) -> AnyPublisher<Data, Error> {
-        // swap out befor meetup
-//        Just(Data())
-//            .setFailureType(to: Error.self)
-//            .eraseToAnyPublisher()
         session
             .dataTaskPublisher(for: url)
             .map(\.data)
